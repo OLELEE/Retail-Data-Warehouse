@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+ Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="1.0.4" use-changelog="false" last-position="0,0" last-zoom="0.65" max-obj-count="7"
+	 default-schema="public" default-owner="postgres"
+	 layers="Default layer"
+	 active-layers="0"
+	 layer-name-colors="#000000"
+	 layer-rect-colors="#b4b4b4"
+	 show-layer-names="false" show-layer-rects="false">
+<database name="dwh_store" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layers="0" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="dim_time" layers="0" collapse-mode="2" max-obj-count="16" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[This table contains time-related dimensions, useful for analytical and time-based querying in a database.]]> </comment>
+	<position x="120" y="180"/>
+	<column name="id_time" not-null="true">
+		<type name="serial" length="0"/>
+		<comment> <![CDATA[This is a unique identifier for each record, automatically generated (Primary Key).]]> </comment>
+	</column>
+	<column name="time_date" not-null="true">
+		<type name="date" length="0"/>
+		<comment> <![CDATA[The actual calendar date (must be filled)]]> </comment>
+	</column>
+	<column name="time_composite_date" not-null="true">
+		<type name="character" length="8"/>
+		<comment> <![CDATA[A composite format of the date (yyyymmdd)]]> </comment>
+	</column>
+	<column name="time_date_description" not-null="true">
+		<type name="character" length="20"/>
+		<comment> <![CDATA[A brief textual description of the date (e.g., "Monday, January 1").]]> </comment>
+	</column>
+	<column name="time_year" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[The year part of the date (e.g., 2025).]]> </comment>
+	</column>
+	<column name="time_previous_year" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[The year prior to the current year in the record.]]> </comment>
+	</column>
+	<column name="time_month_description" not-null="true">
+		<type name="character varying" length="12"/>
+		<comment> <![CDATA[The name of the month in text form (e.g., "January").]]> </comment>
+	</column>
+	<column name="time_month_number" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[The numerical representation of the month (e.g., 1 for January).]]> </comment>
+	</column>
+	<column name="time_month_year" not-null="true">
+		<type name="character varying" length="20"/>
+		<comment> <![CDATA[A combination of the month and year for easier identification (e.g., "Jan 2025")]]> </comment>
+	</column>
+	<column name="time_day_month" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[The day of the month (e.g., 20 for March 20th).]]> </comment>
+	</column>
+	<column name="time_week_number_year" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[The week number within the year (e.g., Week 12).]]> </comment>
+	</column>
+	<column name="time_year_quarter" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[The quarter of the year (e.g., 1 for Q1).]]> </comment>
+	</column>
+	<column name="time_quarter_description" not-null="true">
+		<type name="character varying" length="15"/>
+		<comment> <![CDATA[A textual description of the quarter (e.g., "First Quarter").]]> </comment>
+	</column>
+	<column name="time_vacation_indicator" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[Indicates whether the date corresponds to a vacation or holiday ]]> </comment>
+	</column>
+	<constraint name="pk_id_time" type="pk-constr" table="public.dim_time">
+		<columns names="id_time" ref-type="src-columns"/>
+		<comment> <![CDATA[Ensures that  is the Primary Key, meaning it uniquely identifies each record in the table]]> </comment>
+	</constraint>
+</table>
+
+<table name="dim_product" layers="0" collapse-mode="2" max-obj-count="16" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[This table contains information related to products.]]> </comment>
+	<position x="1520" y="80"/>
+	<column name="id_product" not-null="true">
+		<type name="serial" length="0"/>
+		<comment> <![CDATA[Unique identifier of the product (Primary Key, serial).]]> </comment>
+	</column>
+	<column name="product_department" not-null="true">
+		<type name="character varying" length="25"/>
+		<comment> <![CDATA[The department to which the product belongs]]> </comment>
+	</column>
+	<column name="product_category" not-null="true">
+		<type name="character varying" length="30"/>
+		<comment> <![CDATA[The specific category of the product within the department ]]> </comment>
+	</column>
+	<column name="product_brand" not-null="true">
+		<type name="character varying" length="30"/>
+		<comment> <![CDATA[The brand of the product]]> </comment>
+	</column>
+	<column name="product_upc" not-null="true">
+		<type name="character varying" length="48"/>
+		<comment> <![CDATA[Universal Product Code (UPC)]]> </comment>
+	</column>
+	<column name="product_name" not-null="true">
+		<type name="character varying" length="50"/>
+		<comment> <![CDATA[The commercial name of the product as it appears.]]> </comment>
+	</column>
+	<column name="product_type" not-null="true">
+		<type name="character varying" length="25"/>
+		<comment> <![CDATA[Type of product (e.g., Organic, Electronic, General Use).]]> </comment>
+	</column>
+	<column name="product_country_of_origin" not-null="true">
+		<type name="character varying" length="50"/>
+		<comment> <![CDATA[Country of origin of the product.]]> </comment>
+	</column>
+	<column name="product_package_type" not-null="true">
+		<type name="character varying" length="25"/>
+		<comment> <![CDATA[Type of packaging (e.g., Bottle, Box).]]> </comment>
+	</column>
+	<column name="product_package_capacity" not-null="true">
+		<type name="character varying" length="5"/>
+		<comment> <![CDATA[Packaging capacity or size (e.g., 500ml, 1kg).]]> </comment>
+	</column>
+	<column name="product_inventory_entry_date" not-null="true">
+		<type name="date" length="0"/>
+		<comment> <![CDATA[Date when the product was entered into inventory.]]> </comment>
+	</column>
+	<column name="product_inventory_withdrawal_date" not-null="true">
+		<type name="date" length="0"/>
+		<comment> <![CDATA[Date when the product was withdrawn from inventory.]]> </comment>
+	</column>
+	<column name="product_expiration_date" not-null="true">
+		<type name="date" length="0"/>
+		<comment> <![CDATA[Expiration date of the product (if applicable).]]> </comment>
+	</column>
+	<column name="product_quality_attribute" not-null="true">
+		<type name="character varying" length="70"/>
+		<comment> <![CDATA[Quality attribute of the product (e.g., Fresh, Frozen).]]> </comment>
+	</column>
+	<constraint name="pk_id_product" type="pk-constr" table="public.dim_product">
+		<columns names="id_product" ref-type="src-columns"/>
+		<comment> <![CDATA[ Ensures that  acts as the Primary Key, guaranteeing the uniqueness of each product in this table.]]> </comment>
+	</constraint>
+</table>
+
+<table name="dim_promotion" layers="0" collapse-mode="2" max-obj-count="9" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[This table stores information related to promotions. It is part of the public schema and is designed for use in marketing or This table stores information related to promotions.]]> </comment>
+	<position x="340" y="640"/>
+	<column name="id_promotion" not-null="true">
+		<type name="serial" length="0"/>
+		<comment> <![CDATA[Unique identifier for each promotion (Primary Key, serial).]]> </comment>
+	</column>
+	<column name="promotion_type" not-null="true">
+		<type name="character varying" length="10"/>
+		<comment> <![CDATA[The type of promotion ]]> </comment>
+	</column>
+	<column name="promotion_description" not-null="true">
+		<type name="character varying" length="50"/>
+		<comment> <![CDATA[A brief description of the promotion (e.g., "15% off on electronics").]]> </comment>
+	</column>
+	<column name="promotion_discount_value" not-null="true">
+		<type name="character varying" length="10"/>
+		<comment> <![CDATA[The discount value associated with the promotion (e.g., "15%", "Buy 1 Get 1").]]> </comment>
+	</column>
+	<column name="promotion_channel" not-null="true">
+		<type name="character varying" length="50"/>
+		<comment> <![CDATA[The channel through which the promotion is offered]]> </comment>
+	</column>
+	<column name="promotion_cost" not-null="true">
+		<type name="float" length="0"/>
+		<comment> <![CDATA[The cost associated with running the promotion (e.g., advertisement expense)]]> </comment>
+	</column>
+	<column name="promotion_start_date" not-null="true">
+		<type name="date" length="0"/>
+		<comment> <![CDATA[The start date of the promotion. This field is mandatory]]> </comment>
+	</column>
+	<column name="promotion_end_date" not-null="true">
+		<type name="date" length="0"/>
+		<comment> <![CDATA[The end date of the promotion. This field is mandatory.]]> </comment>
+	</column>
+	<constraint name="pk_id_promotion" type="pk-constr" table="public.dim_promotion">
+		<columns names="id_promotion" ref-type="src-columns"/>
+		<comment> <![CDATA[Ensures that  id_promotion serves as the Primary Key, uniquely identifying each record in this table.]]> </comment>
+	</constraint>
+</table>
+
+<table name="dim_branch" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[This table contains information about the branches of an organization, covering details such as location and name.]]> </comment>
+	<position x="1340" y="620"/>
+	<column name="id_branch" not-null="true">
+		<type name="serial" length="0"/>
+		<comment> <![CDATA[Unique identifier for each branch (Primary Key, serial).]]> </comment>
+	</column>
+	<column name="branch_region" not-null="true">
+		<type name="character varying" length="10"/>
+		<comment> <![CDATA[Region where the branch is located (e.g., North, South).]]> </comment>
+	</column>
+	<column name="branch_city" not-null="true">
+		<type name="character varying" length="50"/>
+		<comment> <![CDATA[City where the branch is located (e.g., Toluca, Monterrey). ]]> </comment>
+	</column>
+	<column name="brach_street" not-null="true">
+		<type name="character varying" length="75"/>
+		<comment> <![CDATA[Street name and address of the branch. ]]> </comment>
+	</column>
+	<column name="brach_name" not-null="true">
+		<type name="character varying" length="25"/>
+		<comment> <![CDATA[Name of the branch (e.g., "Downtown Branch").]]> </comment>
+	</column>
+	<constraint name="pk_id_branch" type="pk-constr" table="public.dim_branch">
+		<columns names="id_branch" ref-type="src-columns"/>
+		<comment> <![CDATA[Ensures that  id_branch serves as the Primary Key, uniquely identifying each branch.]]> </comment>
+	</constraint>
+</table>
+
+<table name="dim_payment" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[This table stores information about payment methods used by customers, including their type, bank, and card name.]]> </comment>
+	<position x="760" y="20"/>
+	<column name="id_payment" not-null="true">
+		<type name="serial" length="0"/>
+		<comment> <![CDATA[Unique identifier for each payment record (Primary Key, serial).]]> </comment>
+	</column>
+	<column name="payment_type" not-null="true">
+		<type name="character varying" length="10"/>
+		<comment> <![CDATA[Type of payment method (e.g., Credit, Debit, Cash).]]> </comment>
+	</column>
+	<column name="payment_bank" not-null="true">
+		<type name="character varying" length="25"/>
+		<comment> <![CDATA[Name of the bank associated with the payment (e.g., Citibanamex, BBVA). ]]> </comment>
+	</column>
+	<column name="payment_card_name" not-null="true">
+		<type name="character varying" length="25"/>
+		<comment> <![CDATA[Name of the card used for payment (e.g., Visa, Mastercard)]]> </comment>
+	</column>
+	<constraint name="pk_id_payment" type="pk-constr" table="public.dim_payment">
+		<columns names="id_payment" ref-type="src-columns"/>
+		<comment> <![CDATA[Ensures that id_payment  serves as the Primary Key, uniquely identifying each payment recor]]> </comment>
+	</constraint>
+</table>
+
+<table name="fac_sales" layers="0" collapse-mode="2" max-obj-count="9" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[This table stores detailed information about sales transactions, including time, branch, product, promotion, payment method, quantity, and amount.]]> </comment>
+	<position x="920" y="300"/>
+	<column name="id_sales" not-null="true">
+		<type name="serial" length="0"/>
+		<comment> <![CDATA[Unique identifier for each sales transaction]]> </comment>
+	</column>
+	<column name="id_time" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[ Foreign key referencing the time dimension, indicating when the transaction occurred.]]> </comment>
+	</column>
+	<column name="id_brach" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[Foreign key referencing the branch dimension, indicating where the transaction took place.]]> </comment>
+	</column>
+	<column name="id_product" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[Foreign key referencing the product dimension, specifying the product involved in the transaction.]]> </comment>
+	</column>
+	<column name="id_promotion" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[Foreign key referencing the promotion dimension, indicating the promotion applied, if any.]]> </comment>
+	</column>
+	<column name="id_payment" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[Foreign key referencing the payment dimension, specifying the payment method used.]]> </comment>
+	</column>
+	<column name="quantity_sales" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[Number of units sold in the transaction.]]> </comment>
+	</column>
+	<column name="mount_sales" not-null="true">
+		<type name="float" length="0"/>
+		<comment> <![CDATA[Total monetary amount of the sales transaction.]]> </comment>
+	</column>
+</table>
+
+<constraint name="fk_id_time" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="RESTRICT" ref-table="public.dim_time" table="public.fac_sales">
+	<columns names="id_time" ref-type="src-columns"/>
+	<columns names="id_time" ref-type="dst-columns"/>
+		<comment> <![CDATA[Ensures that  id_time refers to a valid record in the dim_time  table.]]> </comment>
+</constraint>
+
+<constraint name="fk_id_branch" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="RESTRICT" ref-table="public.dim_branch" table="public.fac_sales">
+	<columns names="id_brach" ref-type="src-columns"/>
+	<columns names="id_branch" ref-type="dst-columns"/>
+		<comment> <![CDATA[Ensures that  id_brach refers to a valid record in the dim_brach  table.]]> </comment>
+</constraint>
+
+<constraint name="fk_id_product" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="RESTRICT" ref-table="public.dim_product" table="public.fac_sales">
+	<columns names="id_product" ref-type="src-columns"/>
+	<columns names="id_product" ref-type="dst-columns"/>
+		<comment> <![CDATA[Ensures that  id_product refers to a valid record in the dim_product table.]]> </comment>
+</constraint>
+
+<constraint name="fk_id_promotion" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="RESTRICT" ref-table="public.dim_promotion" table="public.fac_sales">
+	<columns names="id_promotion" ref-type="src-columns"/>
+	<columns names="id_promotion" ref-type="dst-columns"/>
+		<comment> <![CDATA[Ensures that  id_promotion refers to a valid record in the dim_promotion  table.]]> </comment>
+</constraint>
+
+<constraint name="fk_id_payment" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="RESTRICT" ref-table="public.dim_payment" table="public.fac_sales">
+	<columns names="id_payment" ref-type="src-columns"/>
+	<columns names="id_payment" ref-type="dst-columns"/>
+		<comment> <![CDATA[Ensures that  id_payment refers to a valid record in the dim_payment table.]]> </comment>
+</constraint>
+
+<relationship name="rel_fac_sales_dim_time" type="relfk" layers="0"
+	 src-table="public.fac_sales"
+	 dst-table="public.dim_time" reference-fk="fk_id_time"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_fac_sales_dim_branch" type="relfk" layers="0"
+	 src-table="public.fac_sales"
+	 dst-table="public.dim_branch" reference-fk="fk_id_branch"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_fac_sales_dim_product" type="relfk" layers="0"
+	 src-table="public.fac_sales"
+	 dst-table="public.dim_product" reference-fk="fk_id_product"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_fac_sales_dim_promotion" type="relfk" layers="0"
+	 src-table="public.fac_sales"
+	 dst-table="public.dim_promotion" reference-fk="fk_id_promotion"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_fac_sales_dim_payment" type="relfk" layers="0"
+	 src-table="public.fac_sales"
+	 dst-table="public.dim_payment" reference-fk="fk_id_payment"
+	 src-required="false" dst-required="true"/>
+
+</dbmodel>
